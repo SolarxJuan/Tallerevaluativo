@@ -1,7 +1,6 @@
 const CONFIG = {
     apiUrl: 'https://raw.githubusercontent.com/CesarMCuellarCha/apis/refs/heads/main/SENA-CTPI.matriculados.json',
     credentials: {
-        username: "Juan Jose",
         password: "adso2993013"
     }
 };
@@ -28,7 +27,7 @@ const DOM = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    DOM.authorNameSpan.textContent = CONFIG.credentials.username;
+    DOM.authorNameSpan.textContent = "Instructor SENA";
     
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
@@ -45,13 +44,15 @@ function handleLogin() {
     const username = DOM.usernameInput.value.trim();
     const password = DOM.passwordInput.value.trim();
 
-    if (username === CONFIG.credentials.username && password === CONFIG.credentials.password) {
-        localStorage.setItem('currentUser', username);
-        showApp(username);
+    if (password === CONFIG.credentials.password) {
+        const displayName = username || "Usuario SENA";
+        localStorage.setItem('currentUser', displayName);
+        showApp(displayName);
         loadData();
         DOM.loginError.textContent = '';
     } else {
-        DOM.loginError.textContent = 'Usuario o contraseña incorrectos';
+        DOM.loginError.textContent = 'Contraseña incorrecta';
+        DOM.passwordInput.focus();
     }
 }
 
@@ -63,6 +64,7 @@ function handleLogout() {
     DOM.appContainer.style.display = 'none';
     DOM.usernameInput.value = '';
     DOM.passwordInput.value = '';
+    DOM.usernameInput.focus();
 }
 
 function showApp(username) {
@@ -117,7 +119,7 @@ function populateFichasSelect() {
     STATE.programas.forEach(programa => {
         const option = document.createElement('option');
         option.value = programa.codigo_ficha;
-        option.textContent = programa.codigo_ficha;
+        option.textContent = `${programa.codigo_ficha} - ${programa.nombre_programa}`;
         DOM.fichaSelect.appendChild(option);
     });
 }
